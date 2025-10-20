@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 import shutil
 import re
@@ -7,16 +10,54 @@ from datetime import datetime
 from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from transformers import pipeline
+
+# Load the pre-trained model for text classification
+nlp = pipeline("text-classification", model="distilbert-base-uncased-finetuned-sst-2-english")
 
 # Load configuration from config.json
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-# ... rest of your code ...
+def categorize_file_ai(file_path):
+    """Read text and ask AI for category."""
+    text = ""
+    if file_path.endswith(".pdf"):
+        with open(file_path, "rb") as f:
+            reader = PyPDF2.PdfReader(f)
+            for page in reader.pages[:3]:
+                text += page.extract_text() or ""
+    elif file_path.endswith(".txt"):
+        with open(file_path, "r", encoding="utf-8") as f:
+            text = f.read()[:2000]
+
+    # Use the pre-trained model for text classification
+    result = nlp(text)
+    category = result[0]['label']
+
+    return category
 
 def sort_files():
     # Sort files logic goes here
-    pass
+    source_dir = config.get("source_dir", "")
+    output_dir = config.get("output_dir", "")
+
+    if not source_dir or not output_dir:
+        messagebox.showerror("Error", "Please select both source and output directories.")
+        return
+
+    for root, dirs, files in os.walk(source_dir):
+        for file in files:
+            file_path = os.path.join(root, file)
+            category = categorize_file_ai(file_path)
+
+            category_dir = os.path.join(output_dir, category)
+            if not os.path.exists(category_dir):
+                os.makedirs(category_dir)
+
+            shutil.move(file_path, os.path.join(category_dir, file))
+
+    messagebox.showinfo("Success", "Files sorted successfully.")
 
 def select_source_dir():
     source_dir = filedialog.askdirectory(initialdir=config.get("source_dir", "."), title="Select Source Directory")

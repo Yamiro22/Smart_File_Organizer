@@ -1,95 +1,87 @@
-# 📘 **README.md**
-
-```markdown
 # 🧠 Smart File Organizer
 
-**Developer:** Mohammed Yamin  
-**IDE:** VS Code | **AI Assistant:** Tabnine  
-**Language:** Python 3.11+
+![AI Powered](https://img.shields.io/badge/AI-Powered-lightblue?logo=openai&logoColor=white) ![Build](https://img.shields.io/badge/Build-PyInstaller-lightgrey?logo=gear&logoColor=white)
 
-An intelligent automation tool that scans folders and **automatically sorts files** by **type**, **date**, or **name pattern** — saving time and keeping your workspace clean.  
-Built in VS Code with Tabnine AI assistance for optimized and readable code.
+A **smart desktop automation tool** that automatically sorts, classifies, and organizes files using AI.
 
----
-
-## 🚀 Features
-
-✅ Automatically detects and moves files by:
-
-- **File Type** → images, videos, documents, audio, etc.
-- **Creation Date** → groups files by day.
-- **Name Pattern** → detects words like “invoice”, “report”, “project”.
-
-✅ Supports **custom configuration** via `config.json`  
-✅ Creates **detailed log files** for each run  
-✅ Lightweight — runs on any machine with Python 3  
-✅ Designed and formatted professionally with Tabnine + VS Code
+Built with **VS Code** , **Tabnine** , and **PySimpleGUI** , it features **real-time monitoring** , **AI categorization** , and a modern **GUI** .
 
 ---
 
-## 🗂️ Folder Structure
-```
+## 🚀 Getting Started
 
-Smart_File_Organizer/
+### 🧩 Prerequisites
 
-│
-
-├── main.py
-
-├── config.json
-
-├── requirements.txt
-
-├── README.md
-
-│
-
-├── data/ # Unsorted files
-
-├── output/ # Sorted files
-
-└── logs/ # Run logs
-
-````
+- [Python 3.10+](https://www.python.org/downloads/)
+- [Pip](https://pip.pypa.io/en/stable/)
+- (Optional) [OpenAI API Key](https://platform.openai.com/account/api-keys) — for AI categorization
 
 ---
 
-## ⚙️ Installation Guide
+### ⚙️ Installation
 
-1️⃣ **Clone the repository**
 ```bash
 git clone https://github.com/Yamiro22/Smart_File_Organizer.git
 cd Smart_File_Organizer
-````
-
-2️⃣ **Create a virtual environment**
-
-```bash
-python -m venv venv
-venv\Scripts\activate    # Windows
-# or
-source venv/bin/activate # macOS/Linux
-```
-
-3️⃣ **Install dependencies**
-
-```bash
 pip install -r requirements.txt
 ```
 
-4️⃣ **Prepare your folders**
-
-```
-/data     → place unsorted files here
-/output   → will be auto-created for sorted files
-/logs     → will store log reports
-```
-
-5️⃣ **Run the tool**
+If you plan to use **AI features** :
 
 ```bash
-python main.py
+pip install openai langchain transformers torch
 ```
+
+If you plan to use **real-time folder monitoring** :
+
+```bash
+pip install watchdog
+```
+
+---
+
+## ▶️ Running the App
+
+### 1️⃣ **Graphical Interface**
+
+```bash
+python main_gui.py
+```
+
+Choose your source/output folders, enable AI mode, and click **“Sort Files”** .
+
+---
+
+### 2️⃣ **Real-Time Mode**
+
+Run this to auto-organize files as soon as they appear:
+
+```bash
+python main_watch.py
+```
+
+✅ The tool will run in the background and instantly sort new files.
+
+---
+
+### 3️⃣ **Run Tests**
+
+```bash
+python -m unittest discover
+```
+
+---
+
+## 🧠 Key Features
+
+| Feature                    | Description                            | Libraries               |
+| -------------------------- | -------------------------------------- | ----------------------- |
+| 🔹**Automatic Sorting**    | Organizes files by type, date, or name | `os`,`shutil`           |
+| 🔹**GUI Interface**        | User-friendly desktop app              | `PySimpleGUI`           |
+| 🔹**Real-Time Monitoring** | Detects new files instantly            | `watchdog`              |
+| 🔹**AI Categorization**    | Analyzes content & filenames           | `OpenAI`,`Transformers` |
+| 🔹**Logging System**       | Tracks all operations                  | `logging`               |
+| 🔹**.exe Packaging**       | Runs standalone on Windows             | `PyInstaller`           |
 
 ---
 
@@ -101,75 +93,77 @@ python main.py
   "output_dir": "output",
   "log_dir": "logs",
   "sort_by_date": true,
-
   "file_types": {
-    "Images": [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff"],
-    "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".csv"],
-    "Videos": [".mp4", ".mov", ".avi", ".mkv"],
-    "Audio": [".mp3", ".wav", ".flac"],
-    "Archives": [".zip", ".rar", ".7z"]
+    "Images": [".png", ".jpg", ".jpeg", ".gif"],
+    "Documents": [".pdf", ".docx", ".txt", ".xlsx"],
+    "Videos": [".mp4", ".mov"],
+    "Audio": [".mp3", ".wav"]
   },
-
   "name_patterns": {
     "invoice": "Invoices",
     "report": "Reports",
-    "project": "Projects",
-    "contract": "Contracts",
-    "resume": "Resumes"
-  },
-
-  "logging_level": "INFO"
+    "contract": "Contracts"
+  }
 }
 ```
 
-💡 Edit this file to change file categories or turn off date-based sorting.
+---
+
+## 🧰 Built With
+
+- [Python](https://www.python.org/) — Core Language
+- [PySimpleGUI](https://pysimplegui.readthedocs.io/) — GUI Framework
+- [OpenAI API](https://platform.openai.com/) — AI Categorization
+- [Transformers](https://huggingface.co/docs/transformers/index) — Local Model Integration
+- [Watchdog](https://pythonhosted.org/watchdog/) — File Monitoring
+- [VS Code + Tabnine](https://code.visualstudio.com/) — Development Tools
 
 ---
 
-## 🧰 Technologies Used
+## 🧪 Testing
 
-| Tool                                 | Purpose                 |
-| ------------------------------------ | ----------------------- |
-| **Python 3.11+**                     | Core language           |
-| **VS Code**                          | Development IDE         |
-| **Tabnine**                          | AI code assistant       |
-| **os, shutil, re, pathlib, logging** | File handling & logging |
-| **pandas / openpyxl (optional)**     | Advanced Excel handling |
-| **PySimpleGUI (optional)**           | GUI interface           |
-
----
-
-## 🧾 Example Log Output
-
-```
-2025-10-20 13:22:18 | INFO | Found 34 files in /data
-2025-10-20 13:22:19 | INFO | Moved 10 image files → /output/Images/2025-10-20/
-2025-10-20 13:22:19 | INFO | Moved 8 documents → /output/Documents/2025-10-20/
-2025-10-20 13:22:20 | INFO | Sorting completed successfully ✅
+```bash
+python -m unittest test_main_gui.py
 ```
 
----
-
-## 📸 Screenshots / Demo
-
-> **Before:** Folder with mixed files
->
-> **After:** Auto-organized folders by type and date
-
-_(Insert your own screenshots from VS Code terminal and Explorer here)_
+All test cases validate directory creation, file movement, and logging behavior.
 
 ---
 
-## 🧩 Future Enhancements
+## 📦 Packaging into .exe
 
-- 🪄 Add real-time file monitoring
-- 📦 Integrate GUI for drag-and-drop folders
-- 🌐 Add web dashboard using Flask
-- 📤 Include cloud sync support (Google Drive API)
+```bash
+pyinstaller --noconsole --onefile main_gui.py --icon=logo.ico --add-data "config.json;."
+```
+
+The executable will be created in:
+
+```
+/dist/SmartFileOrganizer.exe
+```
 
 ---
 
-## 💬 Author
+## 🧭 Project Roadmap
+
+| Stage | Goal                        | Tools / Libraries               | Status  |
+| ----- | --------------------------- | ------------------------------- | ------- |
+| **1** | Core Logic & Config         | Python, JSON                    | ✅ Done |
+| **2** | GUI Interface               | PySimpleGUI                     | ✅ Done |
+| **3** | Real-Time Watch Feature     | Watchdog                        | ✅ Done |
+| **4** | Package to `.exe`           | PyInstaller                     | ✅ Done |
+| **5** | GitHub & Portfolio Showcase | GitHub, Wix Studio              | ✅ Done |
+| **6** | AI-Powered Upgrade          | OpenAI, LangChain, Transformers | ✅ Done |
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** — see the [LICENSE.txt](https://chatgpt.com/c/LICENSE.txt) file for details.
+
+---
+
+## 👤 Author
 
 **Mohammed Yamin**
 
@@ -183,12 +177,8 @@ _(Insert your own screenshots from VS Code terminal and Explorer here)_
 
 ---
 
-## 🏁 License
+## 🌟 Acknowledgments
 
-This project is licensed under the MIT License — feel free to use and improve it.
-
----
-
-## 🌟 Support
-
-If you like this project, please ⭐ star it on GitHub and add it to your portfolio
+- Developed entirely using **VS Code + Tabnine AI**
+- AI-Powered by **OpenAI** and **Hugging Face Transformers**
+- Inspired by the need for smart digital organization tools
