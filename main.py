@@ -5,85 +5,106 @@ import logging
 import json
 from datetime import datetime
 from pathlib import Path
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 # Load configuration from config.json
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-# ---- CONFIGURATION ----
-SOURCE_DIR = config.get("source_dir", "data")          # Folder containing unsorted files
-OUTPUT_DIR = config.get("output_dir", "output")        # Folder where sorted files will be saved
-LOG_DIR = config.get("log_dir", "logs")               # Folder for run logs
-SORT_BY_DATE = config.get("sort_by_date", True)        # Set to True to group by creation date
-NAME_PATTERNS = config.get("name_patterns", {            # Optional: Regex keywords → sub-folders
-    "invoice": "Invoices",
-    "report": "Reports",
-    "project": "Projects"
-})
+# ... rest of your code ...
 
-# File categories by extension
-FILE_TYPES = config.get("file_types", {
-    "Images": [".png", ".jpg", ".jpeg", ".gif"],
-    "Documents": [".pdf", ".docx", ".txt", ".xlsx"],
-    "Videos": [".mp4", ".mov", ".avi", ".mkv"],
-    "Audio": [".mp3", ".wav", ".flac"]
-})
+class FileMonitor(FileSystemEventHandler):
+    def __init__(self, source_dir, output_dir):
+        self.source_dir = source_dir
+        self.output_dir = output_dir
 
-# ---- SETUP ----
-os.makedirs(LOG_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+    def on_created(self, event):
+        # Handle new file creation event
+        file_path = event.src_path
+        file_name = os.path.basename(file_path)
+        file_extension = os.path.splitext(file_name)[1]
 
-log_filename = f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-log_path = os.path.join(LOG_DIR, log_filename)
+        # Sort the file based on type, date, or name
+        # ... your sorting logic here ...
 
-logging.basicConfig(
-    filename=log_path,
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s"
-)
+        # Move the file to the appropriate directory
+        # ... your file moving logic here ...
 
-def get_category(file_name: str) -> str:
-    """Return category folder based on extension or regex match."""
-    ext = os.path.splitext(file_name)[1].lower()
+    def on_modified(self, event):
+        # Handle file modification event
+        pass
 
-    # Match by file extension
-    for category, extensions in FILE_TYPES.items():
-        if ext in extensions:
-            return category
-
-    # Match by regex pattern
-    for pattern, folder in NAME_PATTERNS.items():
-        if re.search(pattern, file_name, re.IGNORECASE):
-            return folder
-
-    return "Others"
+    def on_deleted(self, event):
+        # Handle file deletion event
+        pass
 
 def sort_files():
-    """Sort files from SOURCE_DIR into OUTPUT_DIR."""
-    files = [f for f in os.listdir(SOURCE_DIR) if os.path.isfile(os.path.join(SOURCE_DIR, f))]
-    logging.info(f"Found {len(files)} files in /{SOURCE_DIR}")
+    observer = Observer()
+    event_handler = FileMonitor(config["source_dir"], config["output_dir"])
+    observer.schedule(event_handler, config["source_dir"], recursive=True)
+    observer.start()
 
-    for file in files:
-        src_path = os.path.join(SOURCE_DIR, file)
-        category = get_category(file)
-        date_folder = ""
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        observer.stop()
+        observer.join()
 
-        if SORT_BY_DATE:
-            ctime = datetime.fromtimestamp(os.path.getctime(src_path))
-            date_folder = ctime.strftime("%Y-%m-%d")
+def select_source_dir():
+    source_dir = filedialog.askdirectory(initialdir=config.get("source_dir", "."), title="Select Source Directory")
+    if source_dir:
+        config["source_dir"] = source_dir
+        save_config()
 
-        dest_dir = Path(OUTPUT_DIR) / category / date_folder
-        os.makedirs(dest_dir, exist_ok=True)
+def select_output_dir():
+    output_dir = filedialog.askdirectory(initialdir=config.get("output_dir", "."), title="Select Output Directory")
+    if output_dir:
+        config["output_dir"] = output_dir
+        save_config()
 
-        try:
-            shutil.move(src_path, dest_dir)
-            logging.info(f"Moved {file} → {dest_dir}")
-        except Exception as e:
-            logging.error(f"Failed to move {file}: {e}")
+def save_config():
+    with open('config.json', 'w') as f:
+        json.dump(config, f, indent=4)
 
-    logging.info("Sorting completed successfully ✅")
+def create_gui():
+    root = tk.Tk()
+    root.title("Smart File Organizer")
+
+    # Source directory label and button
+    source_label = tk.Label(root, text="Source Directory:")
+    source_label.pack(pady=10)
+
+    source_dir_var = tk.StringVar()
+    source_dir_var.set(config.get("source_dir", ""))
+
+    source_entry = tk.Entry(root, textvariable=source_dir_var, width=50)
+    source_entry.pack()
+
+    source_button = tk.Button(root, text="Select Source Directory", command=select_source_dir)
+    source_button.pack(pady=5)
+
+    # Output directory label and button
+    output_label = tk.Label(root, text="Output Directory:")
+    output_label.pack(pady=10)
+
+    output_dir_var = tk.StringVar()
+    output_dir_var.set(config.get("output_dir", ""))
+
+    output_entry = tk.Entry(root, textvariable=output_dir_var, width=50)
+    output_entry.pack()
+
+    output_button = tk.Button(root, text="Select Output Directory", command=select_output_dir)
+    output_button.pack(pady=5)
+
+    # Sort files button
+    sort_button = tk.Button(root, text="Sort Files", command=sort_files)
+    sort_button.pack(pady=20)
+
+    root.mainloop()
 
 if __name__ == "__main__":
-    print("🚀 Smart File Organizer running…")
-    sort_files()
-    print(f"✅ Sorting complete! Log saved at: {log_path}")
+    create_gui()
