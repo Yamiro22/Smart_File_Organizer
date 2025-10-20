@@ -1,24 +1,47 @@
 {
-  "source_dir": "data",
-  "output_dir": "output",
-  "log_dir": "logs",
-  "sort_by_date": true,
-
-  "file_types": {
-    "Images": [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff"],
-    "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".csv"],
-    "Videos": [".mp4", ".mov", ".avi", ".mkv"],
-    "Audio": [".mp3", ".wav", ".flac"],
-    "Archives": [".zip", ".rar", ".7z"]
-  },
-
-  "name_patterns": {
-    "invoice": "Invoices",
-    "report": "Reports",
-    "project": "Projects",
-    "contract": "Contracts",
-    "resume": "Resumes"
-  },
-
-  "logging_level": "INFO"
+    "source_dir": "C:/Projects/Smart_File_Organizer/data",
+    "output_dir": "output",
+    "log_dir": "logs",
+    "sort_by_date": true,
+    "file_types": {
+        "Images": [
+            ".png",
+            ".jpg",
+            ".jpeg",
+            ".gif",
+            ".bmp",
+            ".tiff"
+        ],
+        "Documents": [
+            ".pdf",
+            ".docx",
+            ".txt",
+            ".xlsx",
+            ".csv"
+        ],
+        "Videos": [
+            ".mp4",
+            ".mov",
+            ".avi",
+            ".mkv"
+        ],
+        "Audio": [
+            ".mp3",
+            ".wav",
+            ".flac"
+        ],
+        "Archives": [
+            ".zip",
+            ".rar",
+            ".7z"
+        ]
+    },
+    "name_patterns": {
+        "invoice": "Invoices",
+        "report": "Reports",
+        "project": "Projects",
+        "contract": "Contracts",
+        "resume": "Resumes"
+    },
+    "logging_level": "INFO"
 }
