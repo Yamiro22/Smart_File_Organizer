@@ -1,0 +1,66 @@
+# ============================================
+# Smart File Organizer
+# Author: Mohammed Yamin
+# Description: Git ignore rules for Python project
+# ============================================
+
+# 🐍 Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 📦 Virtual environments
+venv/
+.env/
+.venv/
+env/
+
+# 🧾 Logs and temp files
+logs/
+*.log
+*.tmp
+*.bak
+*.swp
+
+# 📂 Output & data folders
+output/
+data/
+temp/
+backup/
+
+# 🧩 Build and distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# 🧪 Testing & coverage
+htmlcov/
+.tox/
+.coverage
+coverage.xml
+.pytest_cache/
+.cache/
+
+# 💻 IDE / Editor settings
+.vscode/
+.idea/
+*.code-workspace
+
+# 🖼️ OS / System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 🪄 Notebook checkpoints
+.ipynb_checkpoints/
+
+# 🔧 Config or local overrides
+config_local.json
+*.config_backup.json
+
+# 🧰 Linter / Formatter cache
+.mypy_cache/
+.black/
+.pyre/
+.isort/
